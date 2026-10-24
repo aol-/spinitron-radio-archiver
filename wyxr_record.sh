@@ -15,13 +15,15 @@ TEMP_DIR="/tmp/wyxr_staging"
 AIR_DATE="${AIR_DATE:-$(date +%Y-%m-%d)}"
 YEAR="${YEAR:-$(date +%Y)}"
 COVER_ART="${DEST_DIR}/cover.jpg"
-OUTPUT_FILE="${DEST_DIR}/${SHOW_NAME} - ${AIR_DATE}.mp3"
+FULL_DIR="${DEST_DIR}/Full Broadcasts"
+OUTPUT_FILE="${FULL_DIR}/${SHOW_NAME} - ${AIR_DATE}.mp3"
 RAW_FILE="${TEMP_DIR}/raw_${AIR_DATE}.mp3"
 PLEX_SERVER_IP="${PLEX_SERVER_IP:-plex.local}"
 PLEX_SECTION_ID="${PLEX_SECTION_ID:-12}"
 
 mkdir -p "${TEMP_DIR}"
 mkdir -p "${DEST_DIR}"
+mkdir -p "${FULL_DIR}"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Initializing WYXR processor for ${SHOW_NAME} (${AIR_DATE})..."
 
@@ -105,13 +107,8 @@ else
 fi
 
 rm -rf "${TEMP_DIR}"
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Published to: ${OUTPUT_FILE}"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Published full broadcast to: ${OUTPUT_FILE}"
 
-# Sync to remote Plex server if accessible
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Syncing to Plex server (plexuser@${PLEX_SERVER_IP}:/mnt/plex/radio/)..."
-scp -r "${DEST_DIR}" "plexuser@${PLEX_SERVER_IP}:/mnt/plex/radio/" 2>/dev/null || true
-
-# Refresh Plex library
-curl -s -X GET "http://${PLEX_SERVER_IP}:32400/library/sections/${PLEX_SECTION_ID}/refresh" >/dev/null 2>&1 || true
-curl -s -X GET "http://127.0.0.1:32400/library/sections/${PLEX_SECTION_ID}/refresh" >/dev/null 2>&1 || true
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Plex scan triggered."
+# Automatically break down the broadcast into individual tracks based on Spinitron
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Breaking down broadcast into individual song tracks..."
+python3 "${BASE_DIR}/split_wyxr_archives.py" "${AIR_DATE}"

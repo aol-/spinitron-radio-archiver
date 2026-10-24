@@ -25,24 +25,29 @@ PLEX_SECTION_ID = "12"
 
 EPISODES = [
     {
+        "date": "2026-10-24",
+        "start_time": "10:00:19",
+        "full_file": FULL_DIR / "How Gravity Works - 2026-10-24.mp3"
+    },
+    {
         "date": "2026-10-17",
         "start_time": "10:00:18",
-        "full_file": BASE_DIR / "How Gravity Works - 2026-10-17.mp3"
+        "full_file": FULL_DIR / "How Gravity Works - 2026-10-17.mp3"
     },
     {
         "date": "2026-10-10",
         "start_time": "10:00:18",
-        "full_file": BASE_DIR / "How Gravity Works - 2026-10-10.mp3"
+        "full_file": FULL_DIR / "How Gravity Works - 2026-10-10.mp3"
     },
     {
         "date": "2026-10-03",
         "start_time": "10:00:21",
-        "full_file": BASE_DIR / "How Gravity Works - 2026-10-03.mp3"
+        "full_file": FULL_DIR / "How Gravity Works - 2026-10-03.mp3"
     },
     {
         "date": "2026-09-26",
         "start_time": "10:00:11",
-        "full_file": BASE_DIR / "How Gravity Works - 2026-09-26.mp3"
+        "full_file": FULL_DIR / "How Gravity Works - 2026-09-26.mp3"
     }
 ]
 
@@ -249,9 +254,22 @@ def sync_to_plex():
         print(f"==> Plex refresh trigger note: {e}")
 
 def main():
-    import shutil
-    for ep in EPISODES:
+    if len(sys.argv) > 1:
+        target_date = sys.argv[1]
+        ep = next((e for e in EPISODES if e["date"] == target_date), None)
+        if not ep:
+            cand = BASE_DIR / f"How Gravity Works - {target_date}.mp3"
+            if not cand.exists():
+                cand = FULL_DIR / f"How Gravity Works - {target_date}.mp3"
+            ep = {
+                "date": target_date,
+                "start_time": "10:00:15",
+                "full_file": cand
+            }
         process_episode(ep)
+    else:
+        for ep in EPISODES:
+            process_episode(ep)
     sync_to_plex()
     print("\nAll episodes successfully split, tagged, and synced to Plex!")
 
