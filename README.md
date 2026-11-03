@@ -1,3 +1,3 @@
-# Spinitron Radio Archiver v1.0.0
+# Spinitron Radio Archiver v1.1.0
 
-WYXR StreamGuys archive downloader and lossless FFmpeg Spinitron track splitter placing DJ talk at track endings.
+Added multi-station live & archive recorders (WKCR, WKDU dynamic show-end buffer, WWOZ HTML archive lookup).
