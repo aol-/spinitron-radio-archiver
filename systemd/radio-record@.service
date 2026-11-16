@@ -1,0 +1,8 @@
+[Unit]
+Description=Radio Show Archiver (%i)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/record_show.sh %h/.config/radio-archiver/%i.conf
+TimeoutSec=12000

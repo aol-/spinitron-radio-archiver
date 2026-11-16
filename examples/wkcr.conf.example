@@ -1,0 +1,8 @@
+SHOW_NAME="Notes from Underground"
+DJ_NAME="WKCR"
+STATION_NAME="WKCR 89.9 FM New York"
+GENRE="Hip-Hop / Underground"
+STREAM_URL="https://wkcr.streamguys1.com/live"
+RECORD_SECONDS="9000"
+SPLIT_PLAYLIST="0"
+LIBRARY_DIR="$HOME/Music/Radio_Recordings"
